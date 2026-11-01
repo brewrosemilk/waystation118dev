@@ -97,407 +97,767 @@
 
         <div style="margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 15px;">
 
-            <div> 
-        
+            <div>
+
                 <label>Rating: </label>
+
                 <select id="searchRating" onchange="filterFics()" style="width:auto; margin:0; padding:5px;">
+
                     <option value="All">All Ratings</option>
+
                     <option value="General">General</option>
+
                     <option value="Teen">Teen</option>
+
                     <option value="Mature">Mature</option>
+
                     <option value="Explicit">Explicit</option>
+
                 </select>
+
             </div>
+
             <div>
+
                 <label>Pairing: </label>
+
                 <select id="searchPairing" onchange="filterFics()" style="width:auto; margin:0; padding:5px;">
+
                     <option value="All">All Pairings</option>
+
                     <option value="Buck/Eddie">Buck/Eddie</option>
+
                     <option value="Other">Other</option>
+
                 </select>
+
             </div>
+
             <div>
+
                 <label>Author: </label>
+
                 <input type="text" id="searchAuthor" placeholder="Search author..." oninput="filterFics()" style="width:160px; margin:0; padding:5px; display:inline-block;">
+
             </div>
+
         </div>
+
         <div class="checkbox-group" style="margin-top: 12px;">
+
             <label><input type="checkbox" class="searchTag" value="Canon Compliant" onchange="filterFics()"> Canon Compliant</label>
+
             <label><input type="checkbox" class="searchTag" value="Canon Divergent" onchange="filterFics()"> Canon Divergent</label>
+
             <label><input type="checkbox" class="searchTag" value="Alternate Universe" onchange="filterFics()"> Alternate Universe</label>
+
             <label><input type="checkbox" class="searchTag" value="Getting Together" onchange="filterFics()"> Getting Together</label>
+
             <label><input type="checkbox" class="searchTag" value="Love Realizations & Confessions" onchange="filterFics()"> Love Realizations & Confessions</label>
+
             <label><input type="checkbox" class="searchTag" value="Platonic & Familial Love" onchange="filterFics()"> Platonic & Familial Love</label>
+
             <label><input type="checkbox" class="searchTag" value="Porn With Feelings" onchange="filterFics()"> Porn With Feelings</label>
+
             <label><input type="checkbox" class="searchTag" value="Freak4Freak" onchange="filterFics()"> Freak4Freak</label>
+
             <label><input type="checkbox" class="searchTag" value="Omegaverse" onchange="filterFics()"> Omegaverse</label>
+
             <label><input type="checkbox" class="searchTag" value="Violence" onchange="filterFics()"> Violence</label>
+
             <label><input type="checkbox" class="searchTag" value="Main Character Death" onchange="filterFics()"> Main Character Death</label>
+
         </div>
+
     </div>
+
 
     <div id="feedView"><h2>Loading archive feed...</h2></div>
 
+
     <div id="indexView" class="hidden">
+
         <h2>All Archive Fics (A-Z)</h2>
+
         <hr style="border:0; border-top:1px solid #333; margin-bottom:15px;">
+
         <ul id="indexList" style="padding-left:20px;"></ul>
+
     </div>
+
 
     <div id="formView" class="hidden">
+
         <h2>Post New Fiction</h2>
+
         <input type="text" id="title" placeholder="Fic Title">
+
         <input type="text" id="author" placeholder="Author Name (or leave blank for Anonymous)">
+
         
+
         <label style="font-weight:bold;">Pairing:</label>
+
         <div style="margin: 8px 0 18px 0; display: flex; gap: 20px;">
+
             <label><input type="radio" name="formPairing" value="Buck/Eddie" checked> Buck/Eddie</label>
+
             <label><input type="radio" name="formPairing" value="Other"> Other</label>
+
         </div>
+
 
         <label style="font-weight:bold;">Rating:</label>
+
         <select id="rating">
+
             <option value="General">General Audience</option>
+
             <option value="Teen">Teen & Up</option>
+
             <option value="Mature">Mature</option>
+
             <option value="Explicit">Explicit</option>
+
         </select>
+
         
+
         <label style="font-weight:bold;">Tags:</label>
+
         <div class="checkbox-group" style="margin-bottom: 20px;">
+
             <label><input type="checkbox" class="formTag" value="Canon Compliant"> Canon Compliant</label>
+
             <label><input type="checkbox" class="formTag" value="Canon Divergent"> Canon Divergent</label>
+
             <label><input type="checkbox" class="formTag" value="Alternate Universe"> Alternate Universe</label>
+
             <label><input type="checkbox" class="formTag" value="Getting Together"> Getting Together</label>
+
             <label><input type="checkbox" class="formTag" value="Love Realizations & Confessions"> Love Realizations & Confessions</label>
+
             <label><input type="checkbox" class="formTag" value="Platonic & Familial Love"> Platonic & Familial Love</label>
+
             <label><input type="checkbox" class="formTag" value="Porn With Feelings"> Porn With Feelings</label>
+
             <label><input type="checkbox" class="formTag" value="Freak4Freak"> Freak4Freak</label>
+
             <label><input type="checkbox" class="formTag" value="Omegaverse"> Omegaverse</label>
+
             <label><input type="checkbox" class="formTag" value="Violence"> Violence</label>
+
             <label><input type="checkbox" class="formTag" value="Main Character Death"> Main Character Death</label>
+
         </div>
+
         
+
         <textarea id="body" placeholder="Paste your story here..."></textarea>
+
         <button class="btn" onclick="submitFic()">Publish Work</button>
+
         <button class="btn btn-alt" onclick="showFeed()">Cancel</button>
+
     </div>
+
 
     <div id="ficView" class="hidden">
+
         <button class="btn btn-alt" style="margin-bottom: 20px;" onclick="showFeed()">← Back to Feed</button>
+
         <h2 id="ficTitle" style="margin-bottom:5px; font-size:2rem; color:#e0e0e0;"></h2>
+
         <h3 id="ficAuthor" style="margin-top:0; color:#aaa; font-weight:normal; margin-bottom:10px;"></h3>
+
         <div style="margin-bottom: 20px;" id="ficMeta"></div>
+
         <div class="fic-body" id="ficContent"></div>
+
         <div style="margin-top: 15px;">
+
             <button class="btn" style="background:#800000;" id="likeBtn" onclick="submitLike()">🤍 Like / Kudos (<span id="likeCount">0</span>)</button>
+
         </div>
+
         <div class="comment-section">
+
             <h3 style="margin-top:0; color:#e0e0e0;">Comments</h3>
+
             <div id="commentsList"></div>
+
             <hr style="border: 0; border-top: 1px solid #333333; margin: 25px 0;">
+
             <h4 style="color:#e0e0e0; margin-bottom: 10px;">Leave a comment</h4>
+
             <div id="replyBannerContainer"></div>
+
             <input type="text" id="cName" placeholder="Your Name">
+
             <input type="text" id="cText" placeholder="Your Comment">
+
             <button class="btn" id="commentBtn" onclick="submitComment()">Submit Comment</button>
+
         </div>
+
     </div>
 
+
     <script>
+
         const API_URL = "https://script.google.com/macros/s/AKfycbzmfdowplJV8kuycFa5L7tKrneDf5nT_DkPTdrDF8AFlZJJ2uSQ2o5Q06dhcMt6x8YyvQ/exec"; 
+
         let allData = [];
+
         let activeFic = null;
+
         let currentReplyParentId = "";
 
+
         async function loadData() {
+
             try {
+
                 const res = await fetch(API_URL);
+
                 const newData = await res.json();
+
                 
+
                 if (Array.isArray(newData)) {
+
                     allData = newData;
+
                 }
+
                 
+
                 // Adjust likesCount based on browser localStorage to bridge Google Sheets write lag
+
                 allData.forEach(f => {
+
                     if (localStorage.getItem('liked_' + f.title) && !f._locallyCounted) {
+
                         f.likesCount = (f.likesCount || 0) + 1;
+
                         f._locallyCounted = true;
+
                     }
+
                 });
 
+
                 const hashTitle = decodeURIComponent(window.location.hash.substring(1));
+
                 if (hashTitle) {
+
                     const foundIndex = allData.findIndex(f => f.title.toLowerCase() === hashTitle.toLowerCase());
+
                     if (foundIndex !== -1) {
+
                         viewFic(foundIndex);
+
                         return;
+
                     }
+
                 }
+
                 
+
                 filterFics();
+
             } catch (e) { 
+
                 console.error("Load error:", e);
+
                 if (allData.length === 0) {
+
                     document.getElementById('feedView').innerHTML = "<h3>Failed to load database. Please try refreshing.</h3>";
+
                 } else {
+
                     filterFics();
+
                 }
+
             }
+
         }
+
 
         function filterFics() {
+
             const targetRating = document.getElementById('searchRating').value;
+
             const targetPairing = document.getElementById('searchPairing').value;
+
             const targetAuthor = document.getElementById('searchAuthor').value.toLowerCase().trim();
+
             const targetTags = Array.from(document.querySelectorAll('.searchTag:checked')).map(cb => cb.value);
+
             
+
             let filtered = allData;
+
             if (targetRating !== "All") filtered = filtered.filter(f => f.rating === targetRating);
+
             if (targetPairing !== "All") filtered = filtered.filter(f => f.pairing === targetPairing);
+
             if (targetAuthor) filtered = filtered.filter(f => (f.author || "Anonymous").toLowerCase().includes(targetAuthor));
+
             if (targetTags.length > 0) filtered = filtered.filter(f => targetTags.every(t => f.tags.split(',').includes(t)));
+
             
+
             renderFeed(filtered);
+
         }
+
 
         function renderFeed(items) {
+
             let html = items.length === 0 ? "<p>No matching fics found.</p>" : "";
+
             items.forEach((fic) => {
+
                 const originalIndex = allData.findIndex(f => f.title === fic.title && f.author === fic.author);
+
                 const tagPills = fic.tags ? fic.tags.split(',').map(t => `<span class="tag-pill">${t}</span>`).join('') : '';
+
                 const pairingBadge = fic.pairing ? `<span class="pairing-badge">${fic.pairing}</span>` : '';
+
                 const commentsCount = fic.comments ? fic.comments.length : 0;
+
                 
+
                 html += `<div class="card" onclick="viewFic(${originalIndex})">
+
                     <h3 style="margin:0 0 5px 0; color:#b30000;"><span class="rating-badge">${fic.rating}</span>${pairingBadge}${fic.title}</h3>
+
                     <p style="margin:0 0 8px 0; color:#aaa;">By <strong>${fic.author || 'Anonymous'}</strong> — 🤍 ${fic.likesCount || 0} | 💬 ${commentsCount}</p>
+
                     <div>${tagPills}</div>
+
                 </div>`;
+
             });
+
             document.getElementById('feedView').innerHTML = html;
+
         }
+
 
         function viewFic(index) {
+
             activeFic = allData[index];
+
             currentReplyParentId = ""; // Reset reply state when opening fic
+
             cancelReply();
+
             hideAllViews();
+
             document.getElementById('ficView').classList.remove('hidden');
+
             window.scrollTo(0,0);
+
             
+
             window.location.hash = encodeURIComponent(activeFic.title);
+
             
+
             document.getElementById('ficTitle').innerText = activeFic.title;
+
             document.getElementById('ficAuthor').innerText = `By ${activeFic.author || 'Anonymous'}`;
+
             document.getElementById('likeCount').innerText = activeFic.likesCount || 0;
+
             
+
             // Check if user already liked this fic in this browser
+
             const likeBtn = document.getElementById('likeBtn');
+
             if (localStorage.getItem('liked_' + activeFic.title)) {
+
                 likeBtn.disabled = true;
+
                 likeBtn.innerText = `❤️ Liked / Kudos (${activeFic.likesCount || 0})`;
+
             } else {
+
                 likeBtn.disabled = false;
+
                 likeBtn.innerText = `🤍 Like / Kudos (${activeFic.likesCount || 0})`;
+
             }
+
 
             // Reset comment button state on view
+
             const commentBtn = document.getElementById('commentBtn');
+
             if (commentBtn) {
+
                 commentBtn.disabled = false;
+
                 commentBtn.innerText = "Submit Comment";
+
             }
+
             
+
             const tagPills = activeFic.tags ? activeFic.tags.split(',').map(t => `<span class="tag-pill">${t}</span>`).join('') : '';
+
             const pairingBadge = activeFic.pairing ? `<span class="pairing-badge" style="font-size:1rem;">${activeFic.pairing}</span>` : '';
+
             
+
             document.getElementById('ficMeta').innerHTML = `<span class="rating-badge" style="font-size:1rem;">Rating: ${activeFic.rating}</span> ${pairingBadge} ${tagPills}`;
+
             document.getElementById('ficContent').innerText = activeFic.body;
+
             
+
             renderCommentsList();
+
         }
 
+
         function renderCommentsList() {
+
             if (!activeFic.comments || activeFic.comments.length === 0) {
+
                 document.getElementById('commentsList').innerHTML = "<p>No comments yet.</p>";
+
                 return;
+
             }
+
 
             const topLevel = activeFic.comments.filter(c => !c.parentId);
 
+
             let cHtml = topLevel.map(c => {
+
                 const replies = activeFic.comments.filter(r => String(r.parentId) === String(c.id));
+
                 const repliesHtml = replies.map(r => `
+
                     <div class="comment-reply">
+
                         <strong>${r.name}:</strong> ${r.text}
+
                     </div>
+
                 `).join('');
 
+
                 return `
+
                     <div class="comment">
+
                         <strong>${c.name}:</strong> ${c.text}
+
                         <button class="btn btn-alt" style="padding: 2px 8px; font-size: 0.75rem; margin-left: 10px;" onclick="setReplyTarget('${c.id}', '${c.name.replace(/'/g, "\\'")}')">Reply</button>
+
                         ${repliesHtml}
+
                     </div>
+
                 `;
+
             }).join('');
 
+
             document.getElementById('commentsList').innerHTML = cHtml || "<p>No comments yet.</p>";
+
         }
+
 
         function setReplyTarget(commentId, authorName) {
+
             currentReplyParentId = commentId;
+
             const bannerContainer = document.getElementById('replyBannerContainer');
+
             if (bannerContainer) {
+
                 bannerContainer.innerHTML = `
+
                     <div class="reply-banner">
+
                         <span>Replying to <strong>${authorName}</strong></span>
+
                         <button class="btn btn-alt" style="padding: 2px 6px; font-size: 0.75rem;" onclick="cancelReply()">Cancel</button>
+
                     </div>
+
                 `;
+
             }
+
             document.getElementById('cText').focus();
+
         }
+
 
         function cancelReply() {
+
             currentReplyParentId = "";
+
             const bannerContainer = document.getElementById('replyBannerContainer');
+
             if (bannerContainer) bannerContainer.innerHTML = "";
+
         }
+
 
         async function submitFic() {
+
             const selectedPairing = document.querySelector('input[name="formPairing"]:checked').value;
+
             const selectedTags = Array.from(document.querySelectorAll('.formTag:checked')).map(cb => cb.value).join(',');
+
             
+
             const payload = { 
+
                 type: "fics", 
+
                 title: document.getElementById('title').value.trim(), 
+
                 author: document.getElementById('author').value.trim(), 
+
                 pairing: selectedPairing,
+
                 rating: document.getElementById('rating').value, 
+
                 tags: selectedTags, 
+
                 body: document.getElementById('body').value 
+
             };
+
             
+
             if(!payload.title || !payload.body) return alert("Fill in your Title and Story content.");
+
             alert("Uploading... please click OK and wait.");
+
             
+
             await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+
             
+
             document.getElementById('title').value = ''; 
+
             document.getElementById('author').value = ''; 
+
             document.getElementById('body').value = '';
+
             document.querySelectorAll('.formTag').forEach(cb => cb.checked = false);
+
             document.querySelector('input[name="formPairing"][value="Buck/Eddie"]').checked = true;
+
             
+
             showFeed();
+
         }
+
 
         async function submitLike() {
+
             const likeBtn = document.getElementById('likeBtn');
+
             if (localStorage.getItem('liked_' + activeFic.title)) return;
 
+
             likeBtn.disabled = true;
+
             localStorage.setItem('liked_' + activeFic.title, 'true');
+
             
+
             activeFic.likesCount = (activeFic.likesCount || 0) + 1;
+
             document.getElementById('likeCount').innerText = activeFic.likesCount;
+
             likeBtn.innerText = `❤️ Liked / Kudos (${activeFic.likesCount})`;
 
+
             try {
+
                 await fetch(API_URL, { 
+
                     method: "POST", 
+
                     mode: "no-cors", 
+
                     body: JSON.stringify({ type: "likes", ficTitle: activeFic.title }) 
+
                 });
+
             } catch (e) {
+
                 console.error("Like error:", e);
+
             }
+
         }
 
+
         async function submitComment() {
+
             const nameInput = document.getElementById('cName');
+
             const commentInput = document.getElementById('cText');
+
             const commentBtn = document.getElementById('commentBtn');
 
+
             const authorName = nameInput.value.trim() || "Anonymous";
+
             const commentText = commentInput.value.trim();
+
 
             if(!commentText) return alert("Write a comment first!");
 
+
             commentBtn.disabled = true;
+
             commentBtn.innerText = "Posting...";
+
 
             commentInput.value = '';
 
+
             await new Promise(resolve => setTimeout(resolve, 600));
 
+
             if (!activeFic.comments) activeFic.comments = [];
+
             
+
             const newComment = {
+
                 id: "c_" + activeFic.comments.length,
+
                 name: authorName,
+
                 text: commentText,
+
                 parentId: currentReplyParentId
+
             };
+
 
             activeFic.comments.push(newComment);
 
+
             renderCommentsList();
 
+
             commentBtn.disabled = false;
+
             commentBtn.innerText = "Submit Comment";
 
+
             const payload = { 
+
                 type: "comments", 
+
                 ficTitle: activeFic.title, 
+
                 name: authorName, 
+
                 comment: commentText,
+
                 parentId: currentReplyParentId
+
             };
+
 
             cancelReply();
 
+
             try {
+
                 await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+
             } catch (e) {
+
                 console.error("Comment background sync error:", e);
+
             }
+
         }
+
 
         function showIndex() {
+
             window.location.hash = '';
+
             hideAllViews();
+
             document.getElementById('indexView').classList.remove('hidden');
+
             const sorted = [...allData].sort((a, b) => a.title.localeCompare(b.title));
+
             let html = sorted.map(fic => {
+
                 const idx = allData.findIndex(f => f.title === fic.title);
+
                 return `<li><a href="#" class="index-link" style="color:#b30000; font-weight:bold; text-decoration:none;" onclick="viewFic(${idx}); return false;">${fic.title}</a> by ${fic.author || 'Anonymous'}</li>`;
+
             }).join('');
+
             document.getElementById('indexList').innerHTML = html || "<li>No fics found.</li>";
+
         }
+
 
         function showForm() { 
+
             window.location.hash = '';
+
             hideAllViews(); 
+
             document.getElementById('formView').classList.remove('hidden'); 
+
         }
+
         
+
         function showFeed() { 
+
             window.location.hash = '';
+
             hideAllViews(); 
+
             document.getElementById('filterConsole').classList.remove('hidden'); 
+
             document.getElementById('feedView').innerHTML = "<h2>Updating feed...</h2>"; 
+
             document.getElementById('feedView').classList.remove('hidden'); 
+
             loadData(); 
+
         }
+
         
+
         function hideAllViews() { document.getElementById('feedView').classList.add('hidden'); document.getElementById('ficView').classList.add('hidden'); document.getElementById('formView').classList.add('hidden'); document.getElementById('indexView').classList.add('hidden'); document.getElementById('filterConsole').classList.add('hidden'); }
 
-        loadData();
-    </script>
-</body>
-</html>
 
+        loadData();
+
+    </script>
+
+</body>
+
+</html> 
