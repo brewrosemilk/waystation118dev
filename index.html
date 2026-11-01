@@ -166,17 +166,17 @@
                 const newData = await res.json();
                 
                 if (Array.isArray(newData)) {
-                    // Reverse so newest entries display first, and assign a permanent unique ID
+                    // Reverse so newest entries display first, and track by rowId
                     allData = newData.reverse().map((fic, index) => ({
                         ...fic,
-                        uniqueId: index
+                        uniqueId: fic.rowId !== undefined ? fic.rowId : index
                     }));
                 }
                 
                 allData.forEach(f => {
                     const likeKey = 'liked_' + f.uniqueId + '_' + (f.title || 'untitled');
                     if (localStorage.getItem(likeKey) && !f._locallyCounted) {
-                        f.likesCount = (f.likesCount || 0) + 1;
+                        f.likesCount = (parseInt(f.likesCount, 10) || 0) + 1;
                         f._locallyCounted = true;
                     }
                 });
@@ -222,10 +222,11 @@
                 const tagPills = fic.tags ? fic.tags.split(',').map(t => `<span class="tag-pill">${t}</span>`).join('') : '';
                 const pairingBadge = fic.pairing ? `<span class="pairing-badge">${fic.pairing}</span>` : '';
                 const commentsCount = fic.comments ? fic.comments.length : 0;
+                const likes = parseInt(fic.likesCount, 10) || 0;
                 
                 html += `<div class="card" onclick="viewFic(${fic.uniqueId})">
                     <h3 style="margin:0 0 5px 0; color:#b30000;"><span class="rating-badge">${fic.rating || 'General'}</span>${pairingBadge}${fic.title || 'Untitled'}</h3>
-                    <p style="margin:0 0 8px 0; color:#aaa;">By <strong>${fic.author || 'Anonymous'}</strong> — 🤍 ${fic.likesCount || 0} | 💬 ${commentsCount}</p>
+                    <p style="margin:0 0 8px 0; color:#aaa;">By <strong>${fic.author || 'Anonymous'}</strong> — 🤍 ${likes} | 💬 ${commentsCount}</p>
                     <div>${tagPills}</div>
                 </div>`;
             });
@@ -246,16 +247,17 @@
             
             document.getElementById('ficTitle').innerText = activeFic.title || 'Untitled';
             document.getElementById('ficAuthor').innerText = `By ${activeFic.author || 'Anonymous'}`;
-            document.getElementById('likeCount').innerText = activeFic.likesCount || 0;
+            
+            const currentLikes = parseInt(activeFic.likesCount, 10) || 0;
             
             const likeKey = 'liked_' + activeFic.uniqueId + '_' + (activeFic.title || 'untitled');
             const likeBtn = document.getElementById('likeBtn');
             if (localStorage.getItem(likeKey)) {
                 likeBtn.disabled = true;
-                likeBtn.innerText = `❤️ Liked / Kudos (${activeFic.likesCount || 0})`;
+                likeBtn.innerHTML = `❤️ Liked / Kudos (<span id="likeCount">${currentLikes}</span>)`;
             } else {
                 likeBtn.disabled = false;
-                likeBtn.innerText = `🤍 Like / Kudos (${activeFic.likesCount || 0})`;
+                likeBtn.innerHTML = `🤍 Like / Kudos (<span id="likeCount">${currentLikes}</span>)`;
             }
 
             const commentBtn = document.getElementById('commentBtn');
@@ -357,9 +359,8 @@
             likeBtn.disabled = true;
             localStorage.setItem(likeKey, 'true');
             
-            activeFic.likesCount = (activeFic.likesCount || 0) + 1;
-            document.getElementById('likeCount').innerText = activeFic.likesCount;
-            likeBtn.innerText = `❤️ Liked / Kudos (${activeFic.likesCount})`;
+            activeFic.likesCount = (parseInt(activeFic.likesCount, 10) || 0) + 1;
+            likeBtn.innerHTML = `❤️ Liked / Kudos (<span id="likeCount">${activeFic.likesCount}</span>)`;
 
             try {
                 await fetch(API_URL, { 
