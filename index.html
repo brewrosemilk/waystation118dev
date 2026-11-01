@@ -1,4 +1,160 @@
-<script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waystation118</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 750px; margin: 20px auto; padding: 0 15px; background: #161616; color: #e0e0e0; line-height: 1.6; }
+        header { display: flex; flex-direction: column; align-items: center; text-align: center; border-bottom: 3px solid #660000; padding-bottom: 15px; margin-bottom: 20px; }
+        h1 { margin: 0 0 12px 0; color: #b30000; font-size: 2rem; }
+        .nav-buttons { display: flex; gap: 10px; justify-content: center; }
+        .btn { background: #660000; color: white; padding: 10px 20px; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; font-size: 0.95rem; }
+        .btn:hover { background: #800000; }
+        .btn:disabled { background: #333333; color: #666; cursor: not-allowed; }
+        .btn-alt { background: #333333; color: #e0e0e0; }
+        .btn-alt:hover { background: #444444; }
+        .hidden { display: none; }
+        .card { background: #212121; padding: 20px; margin: 15px 0; border: 1px solid #333333; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); color: #e0e0e0; }
+        .card:hover { border-color: #660000; }
+        .tag-pill { background: #333333; color: #cccccc; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; margin-right: 5px; margin-bottom: 5px; font-weight: 500; display: inline-block; }
+        .rating-badge { background: #333333; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; margin-right: 8px; border: 1px solid #444; }
+        .pairing-badge { background: #333333; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; margin-right: 8px; border: 1px solid #444; }
+        .filter-section { background: #212121; padding: 15px; border-radius: 6px; border: 1px solid #333333; margin-bottom: 15px; color: #e0e0e0; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+        input[type="text"], textarea, select { width: 100%; padding: 10px; margin: 8px 0 18px 0; box-sizing: border-box; background: #2a2a2a; border: 1px solid #444444; border-radius: 4px; font-size: 1rem; color: #ffffff; }
+        input[type="checkbox"], input[type="radio"] { accent-color: #660000; cursor: pointer; }
+        textarea { height: 350px; font-family: inherit; }
+        .fic-body { white-space: pre-line; background: #212121; padding: 25px; border: 1px solid #333333; border-radius: 6px; font-size: 1.1rem; color: #e0e0e0; }
+        .comment-section { margin-top: 40px; background: #212121; padding: 20px; border-radius: 6px; border: 1px solid #333333; }
+        .comment { border-bottom: 1px solid #333333; padding: 12px 0; }
+        .comment:last-child { border-bottom: none; }
+        .comment-reply { margin-left: 20px; border-left: 2px solid #660000; padding-left: 10px; margin-top: 8px; background: #1a1a1a; border-radius: 0 4px 4px 0; padding: 6px 10px; }
+        .reply-banner { background: #2a2a2a; padding: 6px 12px; border-radius: 4px; font-size: 0.85rem; color: #aaa; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #444; }
+        #indexView, #formView, #ficView { background: #161616; }
+        #formView h2, #indexView h2 { color: #e0e0e0; }
+        ul#indexList li { color: #aaa; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 onclick="showFeed()" style="cursor:pointer">Waystation118</h1>
+        <div class="nav-buttons">
+            <button class="btn btn-alt" onclick="showIndex()">All</button>
+            <button class="btn" onclick="showForm()">Post</button>
+        </div>
+    </header>
+
+    <div id="filterConsole" class="filter-section">
+        <strong>Filter Stories:</strong>
+        <div style="margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 15px;">
+            <div>
+                <label>Rating: </label>
+                <select id="searchRating" onchange="filterFics()" style="width:auto; margin:0; padding:5px;">
+                    <option value="All">All Ratings</option>
+                    <option value="General">General</option>
+                    <option value="Teen">Teen</option>
+                    <option value="Mature">Mature</option>
+                    <option value="Explicit">Explicit</option>
+                </select>
+            </div>
+            <div>
+                <label>Pairing: </label>
+                <select id="searchPairing" onchange="filterFics()" style="width:auto; margin:0; padding:5px;">
+                    <option value="All">All Pairings</option>
+                    <option value="Buck/Eddie">Buck/Eddie</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div>
+                <label>Author: </label>
+                <input type="text" id="searchAuthor" placeholder="Search author..." oninput="filterFics()" style="width:160px; margin:0; padding:5px; display:inline-block;">
+            </div>
+        </div>
+        <div class="checkbox-group" style="margin-top: 12px;">
+            <label><input type="checkbox" class="searchTag" value="Canon Compliant" onchange="filterFics()"> Canon Compliant</label>
+            <label><input type="checkbox" class="searchTag" value="Canon Divergent" onchange="filterFics()"> Canon Divergent</label>
+            <label><input type="checkbox" class="searchTag" value="Alternate Universe" onchange="filterFics()"> Alternate Universe</label>
+            <label><input type="checkbox" class="searchTag" value="Getting Together" onchange="filterFics()"> Getting Together</label>
+            <label><input type="checkbox" class="searchTag" value="Love Realizations & Confessions" onchange="filterFics()"> Love Realizations & Confessions</label>
+            <label><input type="checkbox" class="searchTag" value="Platonic & Familial Love" onchange="filterFics()"> Platonic & Familial Love</label>
+            <label><input type="checkbox" class="searchTag" value="Porn With Feelings" onchange="filterFics()"> Porn With Feelings</label>
+            <label><input type="checkbox" class="searchTag" value="Freak4Freak" onchange="filterFics()"> Freak4Freak</label>
+            <label><input type="checkbox" class="searchTag" value="Omegaverse" onchange="filterFics()"> Omegaverse</label>
+            <label><input type="checkbox" class="searchTag" value="Violence" onchange="filterFics()"> Violence</label>
+            <label><input type="checkbox" class="searchTag" value="Main Character Death" onchange="filterFics()"> Main Character Death</label>
+        </div>
+    </div>
+
+    <div id="feedView"><h2>Loading archive feed...</h2></div>
+
+    <div id="indexView" class="hidden">
+        <h2>All Archive Fics (A-Z)</h2>
+        <hr style="border:0; border-top:1px solid #333; margin-bottom:15px;">
+        <ul id="indexList" style="padding-left:20px;"></ul>
+    </div>
+
+    <div id="formView" class="hidden">
+        <h2>Post New Fiction</h2>
+        <input type="text" id="title" placeholder="Fic Title">
+        <input type="text" id="author" placeholder="Author Name (or leave blank for Anonymous)">
+        
+        <label style="font-weight:bold;">Pairing:</label>
+        <div style="margin: 8px 0 18px 0; display: flex; gap: 20px;">
+            <label><input type="radio" name="formPairing" value="Buck/Eddie" checked> Buck/Eddie</label>
+            <label><input type="radio" name="formPairing" value="Other"> Other</label>
+        </div>
+
+        <label style="font-weight:bold;">Rating:</label>
+        <select id="rating">
+            <option value="General">General Audience</option>
+            <option value="Teen">Teen & Up</option>
+            <option value="Mature">Mature</option>
+            <option value="Explicit">Explicit</option>
+        </select>
+        
+        <label style="font-weight:bold;">Tags:</label>
+        <div class="checkbox-group" style="margin-bottom: 20px;">
+            <label><input type="checkbox" class="formTag" value="Canon Compliant"> Canon Compliant</label>
+            <label><input type="checkbox" class="formTag" value="Canon Divergent"> Canon Divergent</label>
+            <label><input type="checkbox" class="formTag" value="Alternate Universe"> Alternate Universe</label>
+            <label><input type="checkbox" class="formTag" value="Getting Together"> Getting Together</label>
+            <label><input type="checkbox" class="formTag" value="Love Realizations & Confessions"> Love Realizations & Confessions</label>
+            <label><input type="checkbox" class="formTag" value="Platonic & Familial Love"> Platonic & Familial Love</label>
+            <label><input type="checkbox" class="formTag" value="Porn With Feelings"> Porn With Feelings</label>
+            <label><input type="checkbox" class="formTag" value="Freak4Freak"> Freak4Freak</label>
+            <label><input type="checkbox" class="formTag" value="Omegaverse"> Omegaverse</label>
+            <label><input type="checkbox" class="formTag" value="Violence"> Violence</label>
+            <label><input type="checkbox" class="formTag" value="Main Character Death"> Main Character Death</label>
+        </div>
+        
+        <textarea id="body" placeholder="Paste your story here..."></textarea>
+        <button class="btn" onclick="submitFic()">Publish Work</button>
+        <button class="btn btn-alt" onclick="showFeed()">Cancel</button>
+    </div>
+
+    <div id="ficView" class="hidden">
+        <button class="btn btn-alt" style="margin-bottom: 20px;" onclick="showFeed()">← Back to Feed</button>
+        <h2 id="ficTitle" style="margin-bottom:5px; font-size:2rem; color:#e0e0e0;"></h2>
+        <h3 id="ficAuthor" style="margin-top:0; color:#aaa; font-weight:normal; margin-bottom:10px;"></h3>
+        <div style="margin-bottom: 20px;" id="ficMeta"></div>
+        <div class="fic-body" id="ficContent"></div>
+        <div style="margin-top: 15px;">
+            <button class="btn" style="background:#800000;" id="likeBtn" onclick="submitLike()">🤍 Like / Kudos (<span id="likeCount">0</span>)</button>
+        </div>
+        <div class="comment-section">
+            <h3 style="margin-top:0; color:#e0e0e0;">Comments</h3>
+            <div id="commentsList"></div>
+            <hr style="border: 0; border-top: 1px solid #333333; margin: 25px 0;">
+            <h4 style="color:#e0e0e0; margin-bottom: 10px;">Leave a comment</h4>
+            <div id="replyBannerContainer"></div>
+            <input type="text" id="cName" placeholder="Your Name">
+            <input type="text" id="cText" placeholder="Your Comment">
+            <button class="btn" id="commentBtn" onclick="submitComment()">Submit Comment</button>
+        </div>
+    </div>
+
+    <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzmfdowplJV8kuycFa5L7tKrneDf5nT_DkPTdrDF8AFlZJJ2uSQ2o5Q06dhcMt6x8YyvQ/exec"; 
         let allData = [];
         let activeFic = null;
@@ -59,7 +215,6 @@
         function renderFeed(items) {
             let html = items.length === 0 ? "<p>No matching fics found.</p>" : "";
             items.forEach((fic) => {
-                // Find exact index in allData array
                 const originalIndex = allData.indexOf(fic);
                 const tagPills = fic.tags ? fic.tags.split(',').map(t => `<span class="tag-pill">${t}</span>`).join('') : '';
                 const pairingBadge = fic.pairing ? `<span class="pairing-badge">${fic.pairing}</span>` : '';
@@ -293,5 +448,5 @@
 
         loadData();
     </script>
-
-</html> 
+</body>
+</html>
