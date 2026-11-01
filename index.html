@@ -3,265 +3,559 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waystation118</title>
+    <title>Waystation Archive (Emergency Standby)</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 750px; margin: 20px auto; padding: 0 15px; background: #f4f4f4; color: #222; line-height: 1.6; }
-        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #900; padding-bottom: 15px; margin-bottom: 20px; }
-        h1 { margin: 0; color: #900; font-size: 1.8rem; }
-        .nav-buttons { display: flex; gap: 8px; }
-        .btn { background: #900; color: white; padding: 10px 16px; border: none; cursor: pointer; font-weight: bold; border-radius: 4px; font-size: 0.95rem; }
-        .btn:hover { background: #b00; }
-        .btn-alt { background: #444; }
-        .btn-alt:hover { background: #666; }
-        .hidden { display: none; }
-        .card { background: white; padding: 20px; margin: 15px 0; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .card:hover { border-color: #900; }
-        .tag-pill { background: #e0e0e0; color: #444; padding: 3px 8px; border-radius: 12px; font-size: 0.8rem; margin-right: 5px; margin-bottom: 5px; font-weight: 500; display: inline-block; }
-        .rating-badge { background: #444; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; margin-right: 8px; }
-        .pairing-badge { background: #004080; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; margin-right: 8px; }
-        .filter-section { background: white; padding: 15px; border-radius: 6px; border: 1px solid #ddd; margin-bottom: 15px; }
-        .checkbox-group { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
-        input[type="text"], textarea, select { width: 100%; padding: 10px; margin: 8px 0 18px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
-        textarea { height: 350px; font-family: inherit; }
-        .fic-body { white-space: pre-line; background: white; padding: 25px; border: 1px solid #ddd; border-radius: 6px; font-size: 1.1rem; }
-        .comment-section { margin-top: 40px; background: #eaeeef; padding: 20px; border-radius: 6px; }
-        .comment { border-bottom: 1px solid #cbd5cc; padding: 12px 0; }
-        .comment:last-child { border-bottom: none; }
+        :root {
+            --bg-color: #0d0d0d;
+            --panel-bg: #161616;
+            --accent-color: #990000;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --border-color: #2a2a2a;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-stack);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 1.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .badge {
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-alt {
+            background-color: transparent;
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+        }
+
+        .filter-panel, .form-panel {
+            background-color: var(--panel-bg);
+            padding: 20px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            background: #000;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 6px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 250px;
+            resize: vertical;
+        }
+
+        .fic-card {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .fic-title {
+            color: #fff;
+            margin: 0 0 5px 0;
+            cursor: pointer;
+        }
+
+        .fic-title:hover {
+            color: #ff4d4d;
+        }
+
+        .fic-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .tag-pill {
+            display: inline-block;
+            background: #222;
+            border: 1px solid #444;
+            color: #ccc;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .fic-body {
+            white-space: pre-line;
+            background: #090909;
+            padding: 25px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 1.05rem;
+            margin: 20px 0;
+        }
+
+        .likes-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+            color: #ff4d4d;
+        }
+
+        .comment-section {
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .comment-box {
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .comment-reply {
+            margin-left: 20px;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 12px;
+            margin-top: 10px;
+            background: #181818;
+            border-radius: 0 4px 4px 0;
+            padding: 8px 12px;
+        }
+
+        .reply-banner {
+            background: #222;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .reply-banner button {
+            padding: 2px 6px;
+            font-size: 0.75rem;
+        }
     </style>
 </head>
 <body>
+
+<div class="container">
     <header>
-        <h1 onclick="showFeed()" style="cursor:pointer">📚 Waystation118</h1>
-        <div class="nav-buttons">
-            <button class="btn btn-alt" onclick="showIndex()">All Fics</button>
-            <button class="btn" onclick="showForm()">Post a Fic</button>
-        </div>
+        <h1>Waystation Archive</h1>
+        <span class="badge">Emergency Standby</span>
     </header>
 
-    <div id="filterConsole" class="filter-section">
-        <strong>Filter Stories:</strong>
-        <div style="margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
-            <div>
-                <label>Rating: </label>
-                <select id="searchRating" onchange="filterFics()" style="width:auto; margin:0; padding:5px;">
-                    <option value="All">All Ratings</option>
-                    <option value="General">General</option>
-                    <option value="Teen">Teen</option>
+    <div class="nav-buttons">
+        <button onclick="showView('listView')">Browse Works</button>
+        <button onclick="showView('formView')" class="btn-alt">+ Post a Work</button>
+    </div>
+
+    <!-- BROWSE & FILTER VIEW -->
+    <div id="listView">
+        <div class="filter-panel" id="filterConsole">
+            <strong>Filter by Tag:</strong>
+            <div class="checkbox-group" style="margin-top: 12px;">
+                <label><input type="checkbox" class="searchTag" value="Canon Compliant" onchange="filterFics()"> Canon Compliant</label>
+                <label><input type="checkbox" class="searchTag" value="Canon Divergent" onchange="filterFics()"> Canon Divergent</label>
+                <label><input type="checkbox" class="searchTag" value="Alternate Universe" onchange="filterFics()"> Alternate Universe</label>
+                <label><input type="checkbox" class="searchTag" value="Getting Together" onchange="filterFics()"> Getting Together</label>
+                <label><input type="checkbox" class="searchTag" value="Love Realizations & Confessions" onchange="filterFics()"> Love Realizations & Confessions</label>
+                <label><input type="checkbox" class="searchTag" value="Platonic & Familial Love" onchange="filterFics()"> Platonic & Familial Love</label>
+                <label><input type="checkbox" class="searchTag" value="Porn With Feelings" onchange="filterFics()"> Porn With Feelings</label>
+                <label><input type="checkbox" class="searchTag" value="Freak4Freak" onchange="filterFics()"> Freak4Freak</label>
+                <label><input type="checkbox" class="searchTag" value="Omegaverse" onchange="filterFics()"> Omegaverse</label>
+                <label><input type="checkbox" class="searchTag" value="Violence" onchange="filterFics()"> Violence</label>
+                <label><input type="checkbox" class="searchTag" value="Main Character Death" onchange="filterFics()"> Main Character Death</label>
+            </div>
+        </div>
+
+        <div id="ficsContainer">Loading emergency archive works...</div>
+    </div>
+
+    <!-- SINGLE WORK VIEW -->
+    <div id="singleView" style="display: none;">
+        <button onclick="showView('listView')" style="margin-bottom: 15px;">← Back to Works</button>
+        <div id="singleFicContent"></div>
+    </div>
+
+    <!-- PUBLISHING FORM VIEW -->
+    <div id="formView" style="display: none;">
+        <div class="form-panel">
+            <h2>Post Work to Emergency Archive</h2>
+            <form id="postForm" onsubmit="handlePostSubmit(event)">
+                <label>Title:</label>
+                <input type="text" id="postTitle" required>
+
+                <label>Author Name / Pseud:</label>
+                <input type="text" id="postAuthor" required>
+
+                <label>Pairing / Characters:</label>
+                <input type="text" id="postPairing" placeholder="e.g., Character A/Character B">
+
+                <label>Rating:</label>
+                <select id="postRating">
+                    <option value="General Audiences">General Audiences</option>
+                    <option value="Teen And Up Audiences">Teen And Up Audiences</option>
                     <option value="Mature">Mature</option>
                     <option value="Explicit">Explicit</option>
                 </select>
-            </div>
-            <div>
-                <label>Pairing: </label>
-                <select id="searchPairing" onchange="filterFics()" style="width:auto; margin:0; padding:5px;">
-                    <option value="All">All Pairings</option>
-                    <option value="Buck/Eddie">Buck/Eddie</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-        </div>
-        <div class="checkbox-group" style="margin-top: 12px;">
-            <label><input type="checkbox" class="searchTag" value="Canon Compliant" onchange="filterFics()"> Canon Compliant</label>
-            <label><input type="checkbox" class="searchTag" value="Canon Divergent" onchange="filterFics()"> Canon Divergent</label>
-            <label><input type="checkbox" class="searchTag" value="Alternate Universe" onchange="filterFics()"> Alternate Universe</label>
-            <label><input type="checkbox" class="searchTag" value="Getting Together" onchange="filterFics()"> Getting Together</label>
-            <label><input type="checkbox" class="searchTag" value="Love Realizations & Confessions" onchange="filterFics()"> Love Realizations & Confessions</label>
-            <label><input type="checkbox" class="searchTag" value="Platonic & Familial Love" onchange="filterFics()"> Platonic & Familial Love</label>
-            <label><input type="checkbox" class="searchTag" value="Porn With Feelings" onchange="filterFics()"> Porn With Feelings</label>
-            <label><input type="checkbox" class="searchTag" value="Freak4Freak" onchange="filterFics()"> Freak4Freak</label>
-            <label><input type="checkbox" class="searchTag" value="Violence" onchange="filterFics()"> Violence</label>
-            <label><input type="checkbox" class="searchTag" value="Main Character Death" onchange="filterFics()"> Main Character Death</label>
-        </div>
-    </div>
 
-    <div id="feedView"><h2>Loading archive feed...</h2></div>
+                <label style="margin-top: 10px;">Tags:</label>
+                <div class="checkbox-group" style="margin-bottom: 20px;">
+                    <label><input type="checkbox" class="formTag" value="Canon Compliant"> Canon Compliant</label>
+                    <label><input type="checkbox" class="formTag" value="Canon Divergent"> Canon Divergent</label>
+                    <label><input type="checkbox" class="formTag" value="Alternate Universe"> Alternate Universe</label>
+                    <label><input type="checkbox" class="formTag" value="Getting Together"> Getting Together</label>
+                    <label><input type="checkbox" class="formTag" value="Love Realizations & Confessions"> Love Realizations & Confessions</label>
+                    <label><input type="checkbox" class="formTag" value="Platonic & Familial Love"> Platonic & Familial Love</label>
+                    <label><input type="checkbox" class="formTag" value="Porn With Feelings"> Porn With Feelings</label>
+                    <label><input type="checkbox" class="formTag" value="Freak4Freak"> Freak4Freak</label>
+                    <label><input type="checkbox" class="formTag" value="Omegaverse"> Omegaverse</label>
+                    <label><input type="checkbox" class="formTag" value="Violence"> Violence</label>
+                    <label><input type="checkbox" class="formTag" value="Main Character Death"> Main Character Death</label>
+                </div>
 
-    <div id="indexView" class="hidden">
-        <h2>All Archive Fics (A-Z)</h2>
-        <hr style="border:0; border-top:1px solid #ccc; margin-bottom:15px;">
-        <ul id="indexList" style="padding-left:20px;"></ul>
-    </div>
+                <label>Story Text / Body:</label>
+                <textarea id="postBody" required></textarea>
 
-    <div id="formView" class="hidden">
-        <h2>Post New Fiction</h2>
-        <input type="text" id="title" placeholder="Fic Title">
-        <input type="text" id="author" placeholder="Author Name (or leave blank for Anonymous)">
-        
-        <label style="font-weight:bold;">Pairing:</label>
-        <div style="margin: 8px 0 18px 0; display: flex; gap: 20px;">
-            <label><input type="radio" name="formPairing" value="Buck/Eddie" checked> Buck/Eddie</label>
-            <label><input type="radio" name="formPairing" value="Other"> Other</label>
-        </div>
-
-        <label style="font-weight:bold;">Rating:</label>
-        <select id="rating">
-            <option value="General">General Audience</option>
-            <option value="Teen">Teen & Up</option>
-            <option value="Mature">Mature</option>
-            <option value="Explicit">Explicit</option>
-        </select>
-        
-        <label style="font-weight:bold;">Tags:</label>
-        <div class="checkbox-group" style="margin-bottom: 20px;">
-            <label><input type="checkbox" class="formTag" value="Canon Compliant"> Canon Compliant</label>
-            <label><input type="checkbox" class="formTag" value="Canon Divergent"> Canon Divergent</label>
-            <label><input type="checkbox" class="formTag" value="Alternate Universe"> Alternate Universe</label>
-            <label><input type="checkbox" class="formTag" value="Getting Together"> Getting Together</label>
-            <label><input type="checkbox" class="formTag" value="Love Realizations & Confessions"> Love Realizations & Confessions</label>
-            <label><input type="checkbox" class="formTag" value="Platonic & Familial Love"> Platonic & Familial Love</label>
-            <label><input type="checkbox" class="formTag" value="Porn With Feelings"> Porn With Feelings</label>
-            <label><input type="checkbox" class="formTag" value="Freak4Freak"> Freak4Freak</label>
-            <label><input type="checkbox" class="formTag" value="Violence"> Violence</label>
-            <label><input type="checkbox" class="formTag" value="Main Character Death"> Main Character Death</label>
-        </div>
-        
-        <textarea id="body" placeholder="Paste your story here..."></textarea>
-        <button class="btn" onclick="submitFic()">Publish Work</button>
-        <button class="btn btn-alt" onclick="showFeed()">Cancel</button>
-    </div>
-
-    <div id="ficView" class="hidden">
-        <button class="btn btn-alt" style="margin-bottom: 20px;" onclick="showFeed()">← Back to Feed</button>
-        <h2 id="ficTitle" style="margin-bottom:5px; font-size:2rem;"></h2>
-        <h3 id="ficAuthor" style="margin-top:0; color:#666; font-weight:normal; margin-bottom:10px;"></h3>
-        <div style="margin-bottom: 20px;" id="ficMeta"></div>
-        <div class="fic-body" id="ficContent"></div>
-        <div style="margin-top: 15px;">
-            <button class="btn" style="background:#b22222;" id="likeBtn" onclick="submitLike()">❤️ Like / Kudos (<span id="likeCount">0</span>)</button>
-        </div>
-        <div class="comment-section">
-            <h3 style="margin-top:0;">Comments</h3>
-            <div id="commentsList"></div>
-            <hr style="border: 0; border-top: 1px solid #cbd5cc; margin: 25px 0;">
-            <h4>Leave a comment</h4>
-            <input type="text" id="cName" placeholder="Your Name">
-            <input type="text" id="cText" placeholder="Your Comment">
-            <button class="btn" onclick="submitComment()">Submit Comment</button>
+                <button type="submit" id="submitBtn">Publish to Archive</button>
+            </form>
         </div>
     </div>
+</div>
 
-    <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbweeBfwkRURsdWLS9XfewngOHegAnxOWhtxE4wlYiwtvF-Vwo6tvHHQ4o_bpafjBE_K/exec"; 
-        let allData = [];
-        let activeFic = null;
+<script>
+    // YOUR TEST GOOGLE APPS SCRIPT WEB APP URL
+    const API_URL = "https://script.google.com/macros/s/AKfycbzmfdowplJV8kuycFa5L7tKrneDf5nT_DkPTdrDF8AFlZJJ2uSQ2o5Q06dhcMt6x8YyvQ/exec";
 
-        async function loadData() {
-            try {
-                const res = await fetch(API_URL);
-                allData = await res.json();
-                filterFics();
-            } catch (e) { document.getElementById('feedView').innerHTML = "<h3>Failed to load database.</h3>"; }
-        }
+    let allFics = [];
+    let activeFic = null;
+    let currentReplyParentId = "";
 
-        function filterFics() {
-            const targetRating = document.getElementById('searchRating').value;
-            const targetPairing = document.getElementById('searchPairing').value;
-            const targetTags = Array.from(document.querySelectorAll('.searchTag:checked')).map(cb => cb.value);
-            
-            let filtered = allData;
-            if (targetRating !== "All") filtered = filtered.filter(f => f.rating === targetRating);
-            if (targetPairing !== "All") filtered = filtered.filter(f => f.pairing === targetPairing);
-            if (targetTags.length > 0) filtered = filtered.filter(f => targetTags.every(t => f.tags.split(',').includes(t)));
-            
-            renderFeed(filtered);
-        }
+    // INITIAL LOAD
+    document.addEventListener("DOMContentLoaded", fetchFics);
 
-        function renderFeed(items) {
-            let html = items.length === 0 ? "<p>No matching fics found.</p>" : "";
-            items.forEach((fic) => {
-                const originalIndex = allData.findIndex(f => f.title === fic.title && f.author === fic.author);
-                const tagPills = fic.tags ? fic.tags.split(',').map(t => `<span class="tag-pill">${t}</span>`).join('') : '';
-                const pairingBadge = fic.pairing ? `<span class="pairing-badge">${fic.pairing}</span>` : '';
-                
-                html += `<div class="card" onclick="viewFic(${originalIndex})">
-                    <h3 style="margin:0 0 5px 0; color:#900;"><span class="rating-badge">${fic.rating}</span>${pairingBadge}${fic.title}</h3>
-                    <p style="margin:0 0 8px 0; color:#555;">By <strong>${fic.author || 'Anonymous'}</strong> — ❤️ ${fic.likesCount} | 💬 ${fic.comments.length}</p>
-                    <div>${tagPills}</div>
-                </div>`;
+    function fetchFics() {
+        fetch(API_URL)
+            .then(res => res.json())
+            .then(data => {
+                allFics = data;
+                renderFicsList(allFics);
+            })
+            .catch(err => {
+                document.getElementById("ficsContainer").innerHTML = "<p>Error loading archive. Please refresh.</p>";
+                console.error(err);
             });
-            document.getElementById('feedView').innerHTML = html;
+    }
+
+    function showView(viewId) {
+        document.getElementById("listView").style.display = viewId === "listView" ? "block" : "none";
+        document.getElementById("singleView").style.display = viewId === "singleView" ? "block" : "none";
+        document.getElementById("formView").style.display = viewId === "formView" ? "block" : "none";
+        window.scrollTo(0, 0);
+    }
+
+    function renderFicsList(ficsToRender) {
+        const container = document.getElementById("ficsContainer");
+        if (ficsToRender.length === 0) {
+            container.innerHTML = "<p>No works found matching your filter criteria.</p>";
+            return;
         }
 
-        function viewFic(index) {
-            activeFic = allData[index];
-            hideAllViews();
-            document.getElementById('ficView').classList.remove('hidden');
-            window.scrollTo(0,0);
-            document.getElementById('ficTitle').innerText = activeFic.title;
-            document.getElementById('ficAuthor').innerText = `By ${activeFic.author || 'Anonymous'}`;
-            document.getElementById('likeCount').innerText = activeFic.likesCount;
-            
-            const tagPills = activeFic.tags ? activeFic.tags.split(',').map(t => `<span class="tag-pill">${t}</span>`).join('') : '';
-            const pairingBadge = activeFic.pairing ? `<span class="pairing-badge" style="font-size:1rem;">${activeFic.pairing}</span>` : '';
-            
-            document.getElementById('ficMeta').innerHTML = `<span class="rating-badge" style="font-size:1rem;">Rating: ${activeFic.rating}</span> ${pairingBadge} ${tagPills}`;
-            document.getElementById('ficContent').innerText = activeFic.body;
-            
-            let cHtml = activeFic.comments.map(c => `<div class="comment"><strong>${c.name}:</strong> ${c.text}</div>`).join('');
-            document.getElementById('commentsList').innerHTML = cHtml || "<p>No comments yet.</p>";
+        container.innerHTML = ficsToRender.map((fic, index) => {
+            const tagArray = fic.tags ? fic.tags.split(", ") : [];
+            const tagBadges = tagArray.map(t => `<span class="tag-pill">${t}</span>`).join(" ");
+            const likesCount = fic.likesCount || 0;
+
+            return `
+                <div class="fic-card">
+                    <h2 class="fic-title" onclick="openFic(${index})">${fic.title}</h2>
+                    <div class="fic-meta">
+                        By <strong>${fic.author}</strong> | Pairing: ${fic.pairing || 'N/A'} | Rating: <strong>${fic.rating}</strong> | ❤️ ${likesCount} Kudos
+                    </div>
+                    <div>${tagBadges}</div>
+                </div>
+            `;
+        }).join("");
+    }
+
+    function filterFics() {
+        const checkedTags = Array.from(document.querySelectorAll(".searchTag:checked")).map(cb => cb.value);
+
+        if (checkedTags.length === 0) {
+            renderFicsList(allFics);
+            return;
         }
 
-        async function submitFic() {
-            const selectedPairing = document.querySelector('input[name="formPairing"]:checked').value;
-            const selectedTags = Array.from(document.querySelectorAll('.formTag:checked')).map(cb => cb.value).join(',');
-            
-            const payload = { 
-                type: "fics", 
-                title: document.getElementById('title').value.trim(), 
-                author: document.getElementById('author').value.trim(), 
-                pairing: selectedPairing,
-                rating: document.getElementById('rating').value, 
-                tags: selectedTags, 
-                body: document.getElementById('body').value 
-            };
-            
-            if(!payload.title || !payload.body) return alert("Fill in your Title and Story content.");
-            alert("Uploading... please click OK and wait.");
-            
-            await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
-            
-            document.getElementById('title').value = ''; 
-            document.getElementById('author').value = ''; 
-            document.getElementById('body').value = '';
-            document.querySelectorAll('.formTag').forEach(cb => cb.checked = false);
-            document.querySelector('input[name="formPairing"][value="Buck/Eddie"]').checked = true;
-            
-            showFeed();
+        const filtered = allFics.filter(fic => {
+            const ficTags = fic.tags ? fic.tags.split(", ") : [];
+            return checkedTags.every(tag => ficTags.includes(tag));
+        });
+
+        renderFicsList(filtered);
+    }
+
+    function openFic(index) {
+        activeFic = allFics[index];
+        currentReplyParentId = ""; // Reset reply target
+        const tagArray = activeFic.tags ? activeFic.tags.split(", ") : [];
+        const tagBadges = tagArray.map(t => `<span class="tag-pill">${t}</span>`).join(" ");
+        const likesCount = activeFic.likesCount || 0;
+
+        const container = document.getElementById("singleFicContent");
+        container.innerHTML = `
+            <h2>${activeFic.title}</h2>
+            <div class="fic-meta">
+                By <strong>${activeFic.author}</strong> | Pairing: ${activeFic.pairing || 'N/A'} | Rating: <strong>${activeFic.rating}</strong>
+            </div>
+            <div style="margin-bottom: 15px;">${tagBadges}</div>
+
+            <div style="margin-bottom: 20px;">
+                <button id="likeBtn" onclick="handleLike('${activeFic.title}')">❤️ Leave Kudos (${likesCount})</button>
+            </div>
+
+            <div class="fic-body">${activeFic.body}</div>
+
+            <div class="comment-section">
+                <h3>Comments</h3>
+                <div id="commentsContainer">${renderComments(activeFic)}</div>
+
+                <div class="form-panel" style="margin-top: 20px;">
+                    <h4 id="commentFormHeader">Leave a Comment</h4>
+                    <div id="replyBannerContainer"></div>
+                    <input type="text" id="commentNameInput" placeholder="Name / Pseud (Optional)">
+                    <textarea id="commentTextInput" style="height: 100px;" placeholder="Write a comment..." required></textarea>
+                    <button onclick="handleCommentSubmit()">Post Comment</button>
+                </div>
+            </div>
+        `;
+
+        showView("singleView");
+    }
+
+    function renderComments(fic) {
+        if (!fic.comments || fic.comments.length === 0) {
+            return "<p style='color: #888;'>No comments yet. Be the first!</p>";
         }
 
-        async function submitLike() {
-            document.getElementById('likeBtn').disabled = true;
-            await fetch(API_URL, { method: "POST", body: JSON.stringify({ type: "likes", ficTitle: activeFic.title }) });
-            activeFic.likesCount += 1;
-            document.getElementById('likeCount').innerText = activeFic.likesCount;
+        // Separate top-level comments (no parentId) from replies
+        const topLevel = fic.comments.filter(c => !c.parentId);
+
+        return topLevel.map(c => {
+            // Find replies matching this top-level comment ID
+            const replies = fic.comments.filter(r => String(r.parentId) === String(c.id));
+            
+            const repliesHtml = replies.map(r => `
+                <div class="comment-reply">
+                    <strong>${r.name}:</strong> ${r.text}
+                </div>
+            `).join('');
+
+            return `
+                <div class="comment-box">
+                    <strong>${c.name}:</strong> ${c.text}
+                    <button class="btn-alt" style="padding: 2px 8px; font-size: 0.75rem; margin-left: 10px;" onclick="setReplyTarget('${c.id}', '${c.name}')">Reply</button>
+                    ${repliesHtml}
+                </div>
+            `;
+        }).join('');
+    }
+
+    function setReplyTarget(commentId, authorName) {
+        currentReplyParentId = commentId;
+        const bannerContainer = document.getElementById("replyBannerContainer");
+        if (bannerContainer) {
+            bannerContainer.innerHTML = `
+                <div class="reply-banner">
+                    <span>Replying to <strong>${authorName}</strong></span>
+                    <button onclick="cancelReply()">Cancel Reply</button>
+                </div>
+            `;
         }
+        document.getElementById("commentTextInput").focus();
+    }
 
-        async function submitComment() {
-            const payload = { type: "comments", ficTitle: activeFic.title, name: document.getElementById('cName').value.trim() || "Anonymous", comment: document.getElementById('cText').value.trim() };
-            if(!payload.comment) return alert("Write a comment first!");
-            await fetch(API_URL, { method: "POST", body: JSON.stringify(payload) });
-            const refreshRes = await fetch(API_URL);
-            allData = await refreshRes.json();
-            viewFic(allData.findIndex(f => f.title === activeFic.title));
-            document.getElementById('cText').value = '';
-        }
+    function cancelReply() {
+        currentReplyParentId = "";
+        const bannerContainer = document.getElementById("replyBannerContainer");
+        if (bannerContainer) bannerContainer.innerHTML = "";
+    }
 
-        function showIndex() {
-            hideAllViews();
-            document.getElementById('indexView').classList.remove('hidden');
-            const sorted = [...allData].sort((a, b) => a.title.localeCompare(b.title));
-            let html = sorted.map(fic => {
-                const idx = allData.findIndex(f => f.title === fic.title);
-                return `<li><a href="#" class="index-link" style="color:#900; font-weight:bold; text-decoration:none;" onclick="viewFic(${idx}); return false;">${fic.title}</a> by ${fic.author || 'Anonymous'}</li>`;
-            }).join('');
-            document.getElementById('indexList').innerHTML = html || "<li>No fics found.</li>";
-        }
+    function handleLike(ficTitle) {
+        const btn = document.getElementById("likeBtn");
+        btn.disabled = true;
 
-        function showForm() { hideAllViews(); document.getElementById('formView').classList.remove('hidden'); }
-        function showFeed() { hideAllViews(); document.getElementById('filterConsole').classList.remove('hidden'); document.getElementById('feedView').innerHTML = "<h2>Updating feed...</h2>"; document.getElementById('feedView').classList.remove('hidden'); loadData(); }
-        function hideAllViews() { document.getElementById('feedView').classList.add('hidden'); document.getElementById('ficView').classList.add('hidden'); document.getElementById('formView').classList.add('hidden'); document.getElementById('indexView').classList.add('hidden'); document.getElementById('filterConsole').classList.add('hidden'); }
+        // Optimistic UI update
+        activeFic.likesCount = (activeFic.likesCount || 0) + 1;
+        btn.innerHTML = `❤️ Kudos Left! (${activeFic.likesCount})`;
 
-        loadData();
-    </script>
+        fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                type: "likes",
+                ficTitle: ficTitle
+            })
+        }).catch(err => console.error("Error logging like:", err));
+    }
+
+    function handleCommentSubmit() {
+        const nameInput = document.getElementById("commentNameInput");
+        const textInput = document.getElementById("commentTextInput");
+
+        if (!textInput.value.trim()) return;
+
+        const newComment = {
+            name: nameInput.value.trim() || "Anonymous",
+            text: textInput.value.trim(),
+            parentId: currentReplyParentId
+        };
+
+        // Append to local state immediately
+        if (!activeFic.comments) activeFic.comments = [];
+        activeFic.comments.push({
+            id: "c_" + activeFic.comments.length,
+            ...newComment
+        });
+
+        // Re-render comments container & clear form
+        document.getElementById("commentsContainer").innerHTML = renderComments(activeFic);
+        textInput.value = "";
+        cancelReply();
+
+        // Send to Apps Script in background
+        fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({
+                type: "comments",
+                ficTitle: activeFic.title,
+                name: newComment.name,
+                comment: newComment.text,
+                parentId: newComment.parentId
+            })
+        }).catch(err => console.error("Error submitting comment:", err));
+    }
+
+    function handlePostSubmit(e) {
+        e.preventDefault();
+        const submitBtn = document.getElementById("submitBtn");
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Publishing...";
+
+        const selectedTags = Array.from(document.querySelectorAll(".formTag:checked")).map(cb => cb.value).join(", ");
+
+        const payload = {
+            type: "fics",
+            title: document.getElementById("postTitle").value.trim(),
+            author: document.getElementById("postAuthor").value.trim(),
+            pairing: document.getElementById("postPairing").value.trim(),
+            rating: document.getElementById("postRating").value,
+            tags: selectedTags,
+            body: document.getElementById("postBody").value.trim()
+        };
+
+        fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert("Work published successfully!");
+            document.getElementById("postForm").reset();
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Publish to Archive";
+            fetchFics(); // Reload works list
+            showView("listView");
+        })
+        .catch(err => {
+            alert("Error publishing work. Please check your connection.");
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Publish to Archive";
+            console.error(err);
+        });
+    }
+</script>
+
 </body>
 </html>
