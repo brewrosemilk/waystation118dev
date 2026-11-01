@@ -166,22 +166,26 @@
                 const newData = await res.json();
                 
                 if (Array.isArray(newData)) {
-                    // Reverse so newest entries (bottom of sheet) display first
-                    allData = newData.reverse();
+                    // Reverse so newest entries display first, and assign a permanent unique ID
+                    allData = newData.reverse().map((fic, index) => ({
+                        ...fic,
+                        uniqueId: index
+                    }));
                 }
                 
                 allData.forEach(f => {
-                    if (localStorage.getItem('liked_' + f.title) && !f._locallyCounted) {
+                    const likeKey = 'liked_' + f.uniqueId + '_' + (f.title || 'untitled');
+                    if (localStorage.getItem(likeKey) && !f._locallyCounted) {
                         f.likesCount = (f.likesCount || 0) + 1;
                         f._locallyCounted = true;
                     }
                 });
 
-                const hashTitle = decodeURIComponent(window.location.hash.substring(1));
-                if (hashTitle) {
-                    const foundIndex = allData.findIndex(f => f.title && f.title.toLowerCase() === hashTitle.toLowerCase());
-                    if (foundIndex !== -1) {
-                        viewFic(foundIndex);
+                const hashId = window.location.hash.substring(1);
+                if (hashId) {
+                    const foundFic = allData.find(f => String(f.uniqueId) === hashId);
+                    if (foundFic) {
+                        viewFic(foundFic.uniqueId);
                         return;
                     }
                 }
@@ -215,12 +219,11 @@
         function renderFeed(items) {
             let html = items.length === 0 ? "<p>No matching fics found.</p>" : "";
             items.forEach((fic) => {
-                const originalIndex = allData.indexOf(fic);
                 const tagPills = fic.tags ? fic.tags.split(',').map(t => `<span class="tag-pill">${t}</span>`).join('') : '';
                 const pairingBadge = fic.pairing ? `<span class="pairing-badge">${fic.pairing}</span>` : '';
                 const commentsCount = fic.comments ? fic.comments.length : 0;
                 
-                html += `<div class="card" onclick="viewFic(${originalIndex})">
+                html += `<div class="card" onclick="viewFic(${fic.uniqueId})">
                     <h3 style="margin:0 0 5px 0; color:#b30000;"><span class="rating-badge">${fic.rating || 'General'}</span>${pairingBadge}${fic.title || 'Untitled'}</h3>
                     <p style="margin:0 0 8px 0; color:#aaa;">By <strong>${fic.author || 'Anonymous'}</strong> — 🤍 ${fic.likesCount || 0} | 💬 ${commentsCount}</p>
                     <div>${tagPills}</div>
@@ -229,8 +232,8 @@
             document.getElementById('feedView').innerHTML = html;
         }
 
-        function viewFic(index) {
-            activeFic = allData[index];
+        function viewFic(uniqueId) {
+            activeFic = allData.find(f => f.uniqueId === uniqueId);
             if (!activeFic) return;
 
             currentReplyParentId = ""; 
@@ -239,14 +242,15 @@
             document.getElementById('ficView').classList.remove('hidden');
             window.scrollTo(0,0);
             
-            window.location.hash = encodeURIComponent(activeFic.title || '');
+            window.location.hash = activeFic.uniqueId;
             
             document.getElementById('ficTitle').innerText = activeFic.title || 'Untitled';
             document.getElementById('ficAuthor').innerText = `By ${activeFic.author || 'Anonymous'}`;
             document.getElementById('likeCount').innerText = activeFic.likesCount || 0;
             
+            const likeKey = 'liked_' + activeFic.uniqueId + '_' + (activeFic.title || 'untitled');
             const likeBtn = document.getElementById('likeBtn');
-            if (localStorage.getItem('liked_' + activeFic.title)) {
+            if (localStorage.getItem(likeKey)) {
                 likeBtn.disabled = true;
                 likeBtn.innerText = `❤️ Liked / Kudos (${activeFic.likesCount || 0})`;
             } else {
@@ -347,10 +351,11 @@
 
         async function submitLike() {
             const likeBtn = document.getElementById('likeBtn');
-            if (localStorage.getItem('liked_' + activeFic.title)) return;
+            const likeKey = 'liked_' + activeFic.uniqueId + '_' + (activeFic.title || 'untitled');
+            if (localStorage.getItem(likeKey)) return;
 
             likeBtn.disabled = true;
-            localStorage.setItem('liked_' + activeFic.title, 'true');
+            localStorage.setItem(likeKey, 'true');
             
             activeFic.likesCount = (activeFic.likesCount || 0) + 1;
             document.getElementById('likeCount').innerText = activeFic.likesCount;
@@ -423,8 +428,7 @@
             document.getElementById('indexView').classList.remove('hidden');
             const sorted = [...allData].sort((a, b) => (a.title || '').localeCompare(b.title || ''));
             let html = sorted.map(fic => {
-                const idx = allData.indexOf(fic);
-                return `<li><a href="#" class="index-link" style="color:#b30000; font-weight:bold; text-decoration:none;" onclick="viewFic(${idx}); return false;">${fic.title || 'Untitled'}</a> by ${fic.author || 'Anonymous'}</li>`;
+                return `<li><a href="#" class="index-link" style="color:#b30000; font-weight:bold; text-decoration:none;" onclick="viewFic(${fic.uniqueId}); return false;">${fic.title || 'Untitled'}</a> by ${fic.author || 'Anonymous'}</li>`;
             }).join('');
             document.getElementById('indexList').innerHTML = html || "<li>No fics found.</li>";
         }
